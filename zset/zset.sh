@@ -1,1 +1,2 @@
-cd ~/content/zset && bash init_bash.sh
+bash ~/content/zset/init_bash.sh
+bash ~/content/zset/cp_bashrc.sh
