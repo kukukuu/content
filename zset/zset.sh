@@ -1,2 +1,2 @@
-path=$(cd "$(dirname $0)";pwd)
-eval "bash ${path}/init_bash.sh"
+bash ~/content/zset/init_bash.sh
+bash ~/content/zset/cp_bashrc.sh
