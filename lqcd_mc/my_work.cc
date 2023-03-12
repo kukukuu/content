@@ -9,7 +9,7 @@ int main()
     ComplexVector b(size);
     ComplexVector U(size);
     // b.clean_1();
-    // b[0] = 10;
+    // // b[0] = 10;
     // U.clean_1();
     b.clean_rand();
     U.clean_rand();
