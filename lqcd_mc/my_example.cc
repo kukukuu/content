@@ -266,9 +266,12 @@ void Dslash2(lattice_fermi src, lattice_fermi &dest, lattice_gauge U, const doub
             }
             MPI_Request send_request;
             MPI_Isend(send_vec, src.lat_t, MPI_DOUBLE_COMPLEX, backward_rank, backward_rank, MPI_COMM_WORLD, &send_request);
-            std::cout << "send to backward:Rank# " << node_rank << "->Rank# " << backward_rank << std::endl;
-            MPI_Request recv_request;
+            MPI_Wait(&send_request, MPI_STATUS_IGNORE);
+            // std::cout << "send to backward:Rank# " << node_rank << "->Rank# " << backward_rank << std::endl;
+
             MPI_Barrier(MPI_COMM_WORLD);
+
+            MPI_Request recv_request;
             MPI_Irecv(recv_vec, src.lat_t, MPI_DOUBLE_COMPLEX, backward_rank, node_rank, MPI_COMM_WORLD, &recv_request);
             // MPI_Wait(&recv_request, MPI_STATUS_IGNORE);
             for (int t = 0; t < src.lat_t; t++)
@@ -276,7 +279,7 @@ void Dslash2(lattice_fermi src, lattice_fermi &dest, lattice_gauge U, const doub
                 dest[(x * src.lat_t + t) * 2 + 0] += recv_vec[t];
                 dest[(x * src.lat_t + t) * 2 + 1] -= flag * recv_vec[t];
             }
-            std::cout << "recv from backward:Rank# " << node_rank << "<-Rank# " << backward_rank << std::endl;
+            // std::cout << "recv from backward:Rank# " << node_rank << "<-Rank# " << backward_rank << std::endl;
         }
         else if (x == src.lat_x - 1)
         {
@@ -315,17 +318,20 @@ void Dslash2(lattice_fermi src, lattice_fermi &dest, lattice_gauge U, const doub
             }
             MPI_Request send_request;
             MPI_Isend(send_vec, src.lat_t, MPI_DOUBLE_COMPLEX, forward_rank, forward_rank, MPI_COMM_WORLD, &send_request);
-            std::cout << "send to forward:Rank# " << node_rank << "->Rank# " << forward_rank << std::endl;
-            MPI_Request recv_request;
+            MPI_Wait(&send_request, MPI_STATUS_IGNORE);
+            // std::cout << "send to forward:Rank# " << node_rank << "->Rank# " << forward_rank << std::endl;
+
             MPI_Barrier(MPI_COMM_WORLD);
+
+            MPI_Request recv_request;
             MPI_Irecv(recv_vec, src.lat_t, MPI_DOUBLE_COMPLEX, forward_rank, node_rank, MPI_COMM_WORLD, &recv_request);
-            // MPI_Wait(&recv_request, MPI_STATUS_IGNORE);
+            MPI_Wait(&recv_request, MPI_STATUS_IGNORE);
             for (int t = 0; t < src.lat_t; t++)
             {
                 dest[(x * src.lat_t + t) * 2 + 0] += recv_vec[t];
                 dest[(x * src.lat_t + t) * 2 + 1] += flag * recv_vec[t];
             }
-            std::cout << "recv from forward:Rank# " << node_rank << "<-Rank# " << forward_rank << std::endl;
+            // std::cout << "recv from forward:Rank# " << node_rank << "<-Rank# " << forward_rank << std::endl;
         }
         else
         {
@@ -449,9 +455,17 @@ int CG(lattice_fermi src, lattice_fermi &dest, lattice_gauge U, const double mas
             r1[i] = r0[i];
         for (int i = 0; i < r0.size; i++)
             r0[i] = r0[i] - aphi * q[i];
-        if (norm_2(r0) < 1e-12)
+        if (norm_2(r0) < 1e-12 || f == max - 1)
         {
             // printf("convergence recedul=1e-5\n");
+            std::cout
+                << "##########"
+                << "loop cost:"
+                << f
+                << std::endl
+                << "convergence recedul:"
+                << norm_2(r0)
+                << std::endl;
             break;
         }
     } // for (f) end
@@ -525,7 +539,7 @@ int main()
     // //printf("dslash_2=%f\n",norm_2(dest));
     end = MPI_Wtime();
     std::cout
-        << "########"
+        << "##########"
         << "time cost:"
         << end - start
         << "s"
