@@ -15,7 +15,6 @@ int main()
     zvector U(lat_x, lat_t, lat_spin);
     b.assign_zero();
     b(0, 0, 0) = 1.0;
-    b = b + 1e-18;
     U.assign_unit();
     double mass(1);
     bool dag(true);

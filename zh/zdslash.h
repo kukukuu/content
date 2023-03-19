@@ -21,6 +21,7 @@ public:
         for (int x = 0; x < lat_x; x++)
             for (int t = 0; t < lat_t; t++)
             {
+                
                 // mass term
                 for (int s = 0; s < lat_spin; s++)
                 {

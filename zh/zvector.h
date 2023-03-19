@@ -130,7 +130,7 @@ public:
 
         return result;
     }
-    zvector operator+(const zvector &other)
+    zvector operator+(const zvector &other) const
     {
         if (size != other.size)
         {
@@ -147,7 +147,7 @@ public:
         return result;
     }
 
-    zvector operator-(const zvector &other)
+    zvector operator-(const zvector &other) const
     {
         if (size != other.size)
         {
@@ -164,7 +164,7 @@ public:
         return result;
     }
 
-    zvector operator*(const zvector &other)
+    zvector operator*(const zvector &other) const
     {
         if (size != other.size)
         {
@@ -181,7 +181,7 @@ public:
         return result;
     }
 
-    zvector operator/(const zvector &other)
+    zvector operator/(const zvector &other) const
     {
         if (size != other.size)
         {

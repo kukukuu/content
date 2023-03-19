@@ -18,22 +18,23 @@ public:
     // solve the linear system Ax = b
     void solve()
     {
+        // zvector r = *b;
         std::complex<double> rho_prev(1.0, 0.0);
         std::complex<double> rho(0.0, 0.0);
         std::complex<double> alpha(1.0, 0.0);
         std::complex<double> omega(1.0, 0.0);
         std::complex<double> beta(0.0, 0.0);
         zvector x(dimensions);
-        zvector r = *b;
         zvector r_tilde(dimensions);
         zvector p(dimensions);
         zvector v(dimensions);
         zvector s(dimensions);
         zvector t(dimensions);
-        // x.rand(); // initial guess
-        // Zdslash.dslash(x, r_tilde);
-        // // zvector r = b - A * x;
-        // r = r - r_tilde;
+
+        x.assign_random(); // initial guess
+        Zdslash.dslash(x, r_tilde);
+        // zvector r = b - A * x;
+        r = b - r_tilde;
         x.assign_zero(); // if x=0;r_tilde=r0=b;
         r_tilde = r;
         p.assign_zero();
@@ -86,11 +87,18 @@ private:
         MPI_Barrier(MPI_COMM_WORLD);
         MPI_Allreduce(&tmp, &tmp, 1, MPI_DOUBLE_COMPLEX, MPI_SUM, MPI_COMM_WORLD);
     }
-    void normX(double &tmpXX, zvector &r)
+    void norm2X(double &tmpXX, zvector &r)
     {
         tmpXX = r.norm2();
         MPI_Barrier(MPI_COMM_WORLD);
         MPI_Allreduce(&tmpXX, &tmpXX, 1, MPI_DOUBLE_COMPLEX, MPI_SUM, MPI_COMM_WORLD);
+    }
+    zvector block(zvector &src)
+    {
+        zvector dest;
+        int rank, size;
+        MPI_Comm_size(MPI_COMM_WORLD, &size);
+        MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     }
 };
 #endif
