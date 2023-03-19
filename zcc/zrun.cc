@@ -18,7 +18,7 @@
 // }
 int main()
 {
-    int lat_x(100);
+    int lat_x(10);
     int lat_t(100);
     int lat_spin(2); // const lat_s=2
     int MAX_ITER(1e5);

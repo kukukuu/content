@@ -56,7 +56,7 @@ public:
     void dslash(const zvector &src, zvector &dest)
     {
         dest = src * 0.2;
-        // dest = dest + 0.2;
+        dest = dest + 0.2;
     }
 
 private:

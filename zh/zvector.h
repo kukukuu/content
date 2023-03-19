@@ -6,10 +6,12 @@
 
 class zvector
 {
+private:
+    std::complex<double> *data;
+
 public:
     int size;
     std::vector<int> dimensions;
-    std::complex<double> *data;
     template <typename... Args>
     zvector(Args... args) : dimensions{args...}
     {
@@ -29,7 +31,11 @@ public:
 
     ~zvector()
     {
-        delete[] data;
+        if (data != nullptr)
+        {
+            data = nullptr;
+            delete[] data;
+        }
     }
 
     template <typename T>
@@ -77,7 +83,8 @@ public:
         return *this;
     }
 
-    zvector operator+(const double scalar) const
+    template <typename T>
+    zvector operator+(const T scalar) const
     {
         zvector result(dimensions);
         for (int i = 0; i < size; ++i)
@@ -87,7 +94,8 @@ public:
         return result;
     }
 
-    zvector operator-(const double scalar) const
+    template <typename T>
+    zvector operator-(const T scalar) const
     {
         zvector result(dimensions);
         for (int i = 0; i < size; ++i)
@@ -97,7 +105,8 @@ public:
         return result;
     }
 
-    zvector operator*(const double scalar) const
+    template <typename T>
+    zvector operator*(const T scalar) const
     {
         zvector result(dimensions);
         for (int i = 0; i < size; ++i)
@@ -107,7 +116,8 @@ public:
         return result;
     }
 
-    zvector operator/(const double scalar) const
+    template <typename T>
+    zvector operator/(const T scalar) const
     {
         if (scalar == 0)
             throw std::invalid_argument("Divisor cannot be zero.");
@@ -120,51 +130,6 @@ public:
 
         return result;
     }
-
-    zvector operator+(const std::complex<double> scalar) const
-    {
-        zvector result(dimensions);
-        for (int i = 0; i < size; ++i)
-        {
-            result.data[i] = data[i] + scalar;
-        }
-        return result;
-    }
-
-    zvector operator-(const std::complex<double> scalar) const
-    {
-        zvector result(dimensions);
-        for (int i = 0; i < size; ++i)
-        {
-            result.data[i] = data[i] - scalar;
-        }
-        return result;
-    }
-
-    zvector operator*(const std::complex<double> scalar) const
-    {
-        zvector result(dimensions);
-        for (int i = 0; i < size; ++i)
-        {
-            result.data[i] = data[i] * scalar;
-        }
-        return result;
-    }
-
-    zvector operator/(const std::complex<double> scalar) const
-    {
-        if (scalar == std::complex<double>(0, 0))
-            throw std::invalid_argument("Divisor cannot be zero.");
-
-        zvector result(dimensions);
-        for (int i = 0; i < size; ++i)
-        {
-            result.data[i] = data[i] / scalar;
-        }
-
-        return result;
-    }
-
     zvector operator+(const zvector &other)
     {
         if (size != other.size)
