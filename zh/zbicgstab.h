@@ -1,5 +1,6 @@
 #ifndef _ZBICGSTAB_H
 #define _ZBICGSTAB_H
+#include <mpi.h>
 #include "./zvector.h"
 #include "./zdslash.h"
 class zbicgstab
@@ -79,5 +80,17 @@ private:
     zvector *b;
     zdslash Zdslash;
     std::vector<int> dimensions;
+    void dotX(std::complex<double> &tmp, zvector &t, zvector &s)
+    {
+        tmp = t.dot(s);
+        MPI_Barrier(MPI_COMM_WORLD);
+        MPI_Allreduce(&tmp, &tmp, 1, MPI_DOUBLE_COMPLEX, MPI_SUM, MPI_COMM_WORLD);
+    }
+    void normX(double &tmpXX, zvector &r)
+    {
+        tmpXX = r.norm2();
+        MPI_Barrier(MPI_COMM_WORLD);
+        MPI_Allreduce(&tmpXX, &tmpXX, 1, MPI_DOUBLE_COMPLEX, MPI_SUM, MPI_COMM_WORLD);
+    }
 };
 #endif

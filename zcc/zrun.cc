@@ -1,5 +1,6 @@
-#include <iostream>
 #include "../zh/zbicgstab.h"
+#include <mpi.h>
+#include <iostream>
 #include <ctime>
 // int main()
 // {
@@ -18,6 +19,7 @@
 // }
 int main()
 {
+    MPI_Init(NULL, NULL);
     clock_t start = clock();
     int lat_x(100);
     int lat_t(100);
@@ -42,5 +44,6 @@ int main()
         << (double)(end - start) / CLOCKS_PER_SEC
         << "s"
         << std::endl;
+    MPI_Finalize();
     return 0;
 }
