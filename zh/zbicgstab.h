@@ -41,6 +41,11 @@ public:
         t.assign_zero();
         for (int i = 0; i < MAX_ITER; i++)
         {
+             std::cout << "#"
+                         <<i
+                          <<"-Residual: "
+                  << r.norm2()
+                  << std::endl;
             rho = r_tilde.dot(r);
             beta = (rho / rho_prev) * (alpha / omega);
             p = r + (p - v * omega) * beta;
