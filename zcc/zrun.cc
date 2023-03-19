@@ -21,8 +21,8 @@ int main()
     int lat_x(10);
     int lat_t(100);
     int lat_spin(2); // const lat_s=2
-    int MAX_ITER(1e5);
-    double TOL(1e-5);
+    int MAX_ITER(1e6);
+    double TOL(1e-6);
     zvector b(lat_x,lat_t,lat_spin);
     zvector U(lat_x,lat_t,lat_spin);
     b.assign_random();
