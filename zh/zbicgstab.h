@@ -42,10 +42,10 @@ public:
         for (int i = 0; i < MAX_ITER; i++)
         {
              std::cout << "#"
-                         <<i
-                          <<"-Residual: "
-                  << r.norm2()
-                  << std::endl;
+                       << i 
+                       <<"-Residual: "
+                       << r.norm2()
+                       << std::endl;
             rho = r_tilde.dot(r);
             beta = (rho / rho_prev) * (alpha / omega);
             p = r + (p - v * omega) * beta;
@@ -60,9 +60,6 @@ public:
             r = s - t * omega;
             if (r.norm2() < TOL)
             {
-                std::cout << "#End-loop: "
-                          << i
-                          << std::endl;
                 break;
             }
             rho_prev = rho;
