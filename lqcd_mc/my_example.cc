@@ -190,7 +190,7 @@ double norm_2(lattice_propagator f)
     for (int i = 0; i < f.size; i++)
     {
         f1 += f[i] * conj(f[i]);
-        // //printf("s=%f\n", f[i].real());
+        // printf("s=%f\n", f[i].real());
     }
     tmp = f1.real();
     MPI_Barrier(MPI_COMM_WORLD);
