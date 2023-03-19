@@ -1,20 +1,22 @@
+#ifndef _ZVEXTOR_H
+#define _ZVEXTOR_H
 #include <iostream>
 #include <complex>
 #include <random>
 
-class Vector
+class zvector
 {
 public:
     int size;
     std::vector<int> dimensions;
     std::complex<double> *data;
     template <typename... Args>
-    Vector(Args... args) : dimensions{args...}
+    zvector(Args... args) : dimensions{args...}
     {
         size = (... * args);
         data = new std::complex<double>[size];
     }
-    Vector(const std::vector<int> &dim) : dimensions(dim)
+    zvector(const std::vector<int> &dim) : dimensions(dim)
     {
         size = 1;
         for (int d : dim)
@@ -24,9 +26,9 @@ public:
         data = new std::complex<double>[size];
     }
 
-    ~Vector()
+    ~zvector()
     {
-        delete[] data;
+        // delete[] data;
     }
 
     template <typename... Args>
@@ -43,7 +45,7 @@ public:
         return data[index];
     }
 
-    Vector &operator=(const Vector &other)
+    zvector &operator=(const zvector &other)
     {
         if (this != &other)
         {
@@ -62,9 +64,9 @@ public:
         return *this;
     }
 
-    Vector operator+(const double scalar) const
+    zvector operator+(const double scalar) const
     {
-        Vector result(dimensions);
+        zvector result(dimensions);
         for (int i = 0; i < size; ++i)
         {
             result.data[i] = data[i] + scalar;
@@ -72,9 +74,9 @@ public:
         return result;
     }
 
-    Vector operator-(const double scalar) const
+    zvector operator-(const double scalar) const
     {
-        Vector result(dimensions);
+        zvector result(dimensions);
         for (int i = 0; i < size; ++i)
         {
             result.data[i] = data[i] - scalar;
@@ -82,9 +84,9 @@ public:
         return result;
     }
 
-    Vector operator*(const double scalar) const
+    zvector operator*(const double scalar) const
     {
-        Vector result(dimensions);
+        zvector result(dimensions);
         for (int i = 0; i < size; ++i)
         {
             result.data[i] = data[i] * scalar;
@@ -92,12 +94,12 @@ public:
         return result;
     }
 
-    Vector operator/(const double scalar) const
+    zvector operator/(const double scalar) const
     {
         if (scalar == 0)
             throw std::invalid_argument("Divisor cannot be zero.");
 
-        Vector result(dimensions);
+        zvector result(dimensions);
         for (int i = 0; i < size; ++i)
         {
             result.data[i] = data[i] / scalar;
@@ -106,9 +108,9 @@ public:
         return result;
     }
 
-    Vector operator+(const std::complex<double> scalar) const
+    zvector operator+(const std::complex<double> scalar) const
     {
-        Vector result(dimensions);
+        zvector result(dimensions);
         for (int i = 0; i < size; ++i)
         {
             result.data[i] = data[i] + scalar;
@@ -116,9 +118,9 @@ public:
         return result;
     }
 
-    Vector operator-(const std::complex<double> scalar) const
+    zvector operator-(const std::complex<double> scalar) const
     {
-        Vector result(dimensions);
+        zvector result(dimensions);
         for (int i = 0; i < size; ++i)
         {
             result.data[i] = data[i] - scalar;
@@ -126,9 +128,9 @@ public:
         return result;
     }
 
-    Vector operator*(const std::complex<double> scalar) const
+    zvector operator*(const std::complex<double> scalar) const
     {
-        Vector result(dimensions);
+        zvector result(dimensions);
         for (int i = 0; i < size; ++i)
         {
             result.data[i] = data[i] * scalar;
@@ -136,12 +138,12 @@ public:
         return result;
     }
 
-    Vector operator/(const std::complex<double> scalar) const
+    zvector operator/(const std::complex<double> scalar) const
     {
         if (scalar == std::complex<double>(0, 0))
             throw std::invalid_argument("Divisor cannot be zero.");
 
-        Vector result(dimensions);
+        zvector result(dimensions);
         for (int i = 0; i < size; ++i)
         {
             result.data[i] = data[i] / scalar;
@@ -150,14 +152,14 @@ public:
         return result;
     }
 
-    Vector operator+(const Vector &other)
+    zvector operator+(const zvector &other)
     {
         if (size != other.size)
         {
-            throw std::invalid_argument("Vectors must have the same size.");
+            throw std::invalid_argument("zvectors must have the same size.");
         }
 
-        Vector result(dimensions);
+        zvector result(dimensions);
 
         for (int i = 0; i < size; ++i)
         {
@@ -167,14 +169,14 @@ public:
         return result;
     }
 
-    Vector operator-(const Vector &other)
+    zvector operator-(const zvector &other)
     {
         if (size != other.size)
         {
-            throw std::invalid_argument("Vectors must have the same size.");
+            throw std::invalid_argument("zvectors must have the same size.");
         }
 
-        Vector result(dimensions);
+        zvector result(dimensions);
 
         for (int i = 0; i < size; ++i)
         {
@@ -184,14 +186,14 @@ public:
         return result;
     }
 
-    Vector operator*(const Vector &other)
+    zvector operator*(const zvector &other)
     {
         if (size != other.size)
         {
-            throw std::invalid_argument("Vectors must have the same size.");
+            throw std::invalid_argument("zvectors must have the same size.");
         }
 
-        Vector result(dimensions);
+        zvector result(dimensions);
 
         for (int i = 0; i < size; ++i)
         {
@@ -201,11 +203,11 @@ public:
         return result;
     }
 
-    Vector operator/(const Vector &other)
+    zvector operator/(const zvector &other)
     {
         if (size != other.size)
         {
-            throw std::invalid_argument("Vectors must have the same size.");
+            throw std::invalid_argument("zvectors must have the same size.");
         }
 
         for (int i = 0; i < other.size; ++i)
@@ -216,7 +218,7 @@ public:
             }
         }
 
-        Vector result(dimensions);
+        zvector result(dimensions);
 
         for (int i = 0; i < size; ++i)
         {
@@ -257,14 +259,24 @@ public:
         return sqrt(sum);
     }
 
-    Vector dot_product(const Vector &other)
+    double norm2()
+    {
+        double sum = 0.0;
+        for (int i = 0; i < size; ++i)
+        {
+            sum += std::norm(data[i]);
+        }
+        return sqrt(sum);
+    }
+
+    zvector dot_product(const zvector &other)
     {
         if (size != other.size)
         {
-            throw std::invalid_argument("Vectors must have the same size.");
+            throw std::invalid_argument("zvectors must have the same size.");
         }
 
-        Vector result(dimensions);
+        zvector result(dimensions);
 
         for (int i = 0; i < size; ++i)
         {
@@ -274,11 +286,11 @@ public:
         return result;
     }
 
-    std::complex<double> dot(const Vector &other)
+    std::complex<double> dot(const zvector &other)
     {
         if (size != other.size)
         {
-            throw std::invalid_argument("Vectors must have the same size.");
+            throw std::invalid_argument("zvectors must have the same size.");
         }
 
         std::complex<double> sum(0.0, 0.0);
@@ -291,14 +303,14 @@ public:
         return sum;
     }
 
-    Vector cross_product(const Vector &other)
+    zvector cross_product(const zvector &other)
     {
         if (size != 3 || other.size != 3)
         {
-            throw std::invalid_argument("Cross product is only defined for vectors of size 3.");
+            throw std::invalid_argument("Cross product is only defined for zvectors of size 3.");
         }
 
-        Vector result(dimensions);
+        zvector result(dimensions);
 
         result.data[0] = data[1] * other.data[2] - data[2] * other.data[1];
         result.data[1] = data[2] * other.data[0] - data[0] * other.data[2];
@@ -325,6 +337,5 @@ public:
 
         std::cout << '\n';
     }
-
 };
-
+#endif
