@@ -1,3 +1,4 @@
+#include <ctime>
 #include <complex>
 #include <iostream>
 #include <vector>
@@ -336,6 +337,7 @@ int CG(lattice_fermi src, lattice_fermi &dest, lattice_gauge U, const double mas
 
 int main()
 {
+    clock_t start = clock();
     // gird distance
     int nx = 100;
     int nt = 100;
@@ -385,4 +387,12 @@ int main()
     // printf("norm_src-propagator=%.10e\n",norm_2(ssrc-src));
     // printf("dslash_1=%f\n",norm_2(ssrc));
     // printf("dslash_2=%f\n",norm_2(dest));
+    clock_t end = clock();
+    std::cout
+        << "################"
+        << "time cost:"
+        << (double)(end - start) / CLOCKS_PER_SEC
+        << "s"
+        << std::endl;
+    return 0;
 }
