@@ -1,3 +1,5 @@
+bash-compeletion
+htop
 proot-distro
 man
 vim
