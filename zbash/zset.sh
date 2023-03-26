@@ -1,1 +1,1 @@
-../../../../home/zhangxin/content/zset/zset.sh
+../zset/zset.sh
