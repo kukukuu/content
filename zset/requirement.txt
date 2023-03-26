@@ -28,7 +28,7 @@ numpy
 #opencv-python
 scikit-image
 six
-sklearn
+scikit-learn
 sympy
 openpyxl
 scikit-learn
