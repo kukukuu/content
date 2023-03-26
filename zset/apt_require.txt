@@ -1,3 +1,4 @@
+proot-distro
 man
 vim
 git

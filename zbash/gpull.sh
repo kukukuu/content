@@ -1,1 +1,1 @@
-cd ~/content && git pull
+cd ~/content && git pull --all
