@@ -1,7 +1,7 @@
 #pkg update
 #pkg upgrade
-apt update
-apt upgrade
-apt clean
-apt autoclean
-apt autoremove  
+sudo apt update
+sudo apt upgrade
+sudo apt clean
+sduo apt autoclean
+sudo apt autoremove  
