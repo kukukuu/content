@@ -1,5 +1,5 @@
-pkg update
-pkg upgrade
+#pkg update
+#pkg upgrade
 apt update
 apt upgrade
 apt clean
